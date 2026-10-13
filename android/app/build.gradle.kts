@@ -28,6 +28,14 @@ android {
         versionName = flutter.versionName
     }
 
+    // Compress native libraries (ML Kit + Flutter engine) in the APK: roughly
+    // halves the download for sideloaded builds. App bundles are unaffected.
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
