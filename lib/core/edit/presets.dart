@@ -60,12 +60,7 @@ class Presets {
         Adjust.grainSize: 35,
       },
       curves: {
-        CurveChannel.master: ToneCurve(const [
-          (0, 0.06),
-          (0.25, 0.25),
-          (0.75, 0.78),
-          (1, 0.95),
-        ]),
+        CurveChannel.master: ToneCurve(const [(0, 0.06), (0.25, 0.25), (0.75, 0.78), (1, 0.95)]),
       },
       grade: const ColorGrade(shadowHue: 190, shadowSat: 10, highlightHue: 45, highlightSat: 14),
     ),
@@ -91,18 +86,10 @@ class Presets {
         Adjust.clarity: -18,
         Adjust.vignette: -15,
       },
-      hsl: {
-        HslBand.orange: const HslShift(-4, -8, 12),
-        HslBand.red: const HslShift(0, -6, 5),
-      },
+      hsl: {HslBand.orange: const HslShift(-4, -8, 12), HslBand.red: const HslShift(0, -6, 5)},
     ),
     'B&W Matte': EditParams(
-      values: {
-        Adjust.saturation: -100,
-        Adjust.contrast: 20,
-        Adjust.clarity: 20,
-        Adjust.grain: 20,
-      },
+      values: {Adjust.saturation: -100, Adjust.contrast: 20, Adjust.clarity: 20, Adjust.grain: 20},
       curves: {
         CurveChannel.master: ToneCurve(const [(0, 0.08), (0.3, 0.26), (0.7, 0.76), (1, 0.97)]),
       },

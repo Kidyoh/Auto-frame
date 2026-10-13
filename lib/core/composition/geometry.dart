@@ -6,8 +6,7 @@ import 'dart:math' as math;
 class Box {
   const Box(this.left, this.top, this.width, this.height);
 
-  factory Box.fromLTRB(double l, double t, double r, double b) =>
-      Box(l, t, r - l, b - t);
+  factory Box.fromLTRB(double l, double t, double r, double b) => Box(l, t, r - l, b - t);
 
   final double left;
   final double top;
@@ -36,13 +35,11 @@ class Box {
     math.max(bottom, o.bottom),
   );
 
-  Box scale(double sx, double sy) =>
-      Box(left * sx, top * sy, width * sx, height * sy);
+  Box scale(double sx, double sy) => Box(left * sx, top * sy, width * sx, height * sy);
 
   Box translate(double dx, double dy) => Box(left + dx, top + dy, width, height);
 
-  bool containsPoint(double x, double y) =>
-      x >= left && x <= right && y >= top && y <= bottom;
+  bool containsPoint(double x, double y) => x >= left && x <= right && y >= top && y <= bottom;
 
   @override
   String toString() =>
@@ -51,13 +48,7 @@ class Box {
 }
 
 /// Rotate (x, y) by [radians] around (cx, cy).
-(double, double) rotatePoint(
-  double x,
-  double y,
-  double cx,
-  double cy,
-  double radians,
-) {
+(double, double) rotatePoint(double x, double y, double cx, double cy, double radians) {
   final c = math.cos(radians), s = math.sin(radians);
   final dx = x - cx, dy = y - cy;
   return (cx + dx * c - dy * s, cy + dx * s + dy * c);

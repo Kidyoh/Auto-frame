@@ -6,9 +6,7 @@ import 'dart:typed_data';
 /// so the curve can't invert tones between points.
 class ToneCurve {
   ToneCurve(List<(double, double)> points)
-    : points = List.unmodifiable(
-        ([...points]..sort((a, b) => a.$1.compareTo(b.$1))),
-      ) {
+    : points = List.unmodifiable(([...points]..sort((a, b) => a.$1.compareTo(b.$1)))) {
     if (this.points.length < 2) {
       throw ArgumentError('A tone curve needs at least two points');
     }
@@ -18,8 +16,7 @@ class ToneCurve {
 
   final List<(double, double)> points;
 
-  bool get isIdentity =>
-      points.every((p) => (p.$1 - p.$2).abs() < 1e-6);
+  bool get isIdentity => points.every((p) => (p.$1 - p.$2).abs() < 1e-6);
 
   /// Evaluate the curve at [x] (0..1).
   double evaluate(double x) {
@@ -92,10 +89,11 @@ class ToneCurve {
     return ToneCurve(next);
   }
 
-  List<List<double>> toJson() => [for (final p in points) [p.$1, p.$2]];
+  List<List<double>> toJson() => [
+    for (final p in points) [p.$1, p.$2],
+  ];
 
   factory ToneCurve.fromJson(List<dynamic> json) => ToneCurve([
-    for (final p in json)
-      (((p as List)[0] as num).toDouble(), (p[1] as num).toDouble()),
+    for (final p in json) (((p as List)[0] as num).toDouble(), (p[1] as num).toDouble()),
   ]);
 }

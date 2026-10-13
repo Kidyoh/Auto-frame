@@ -166,8 +166,7 @@ class EditParams {
 
   EditParams setHsl(HslBand b, HslShift s) => copyWith(hsl: {...hsl, b: s});
 
-  EditParams setCurve(CurveChannel c, ToneCurve curve) =>
-      copyWith(curves: {...curves, c: curve});
+  EditParams setCurve(CurveChannel c, ToneCurve curve) => copyWith(curves: {...curves, c: curve});
 
   EditParams copyWith({
     Map<Adjust, double>? values,
@@ -192,11 +191,8 @@ class EditParams {
   );
 
   /// Apply a preset on top of the geometry (crop/rotation) of this edit.
-  EditParams applyPreset(EditParams preset) => preset.copyWith(
-    crop: crop,
-    clearCrop: crop == null,
-    rotationDegrees: rotationDegrees,
-  );
+  EditParams applyPreset(EditParams preset) =>
+      preset.copyWith(crop: crop, clearCrop: crop == null, rotationDegrees: rotationDegrees);
 
   Map<String, dynamic> toJson() => {
     'version': 1,

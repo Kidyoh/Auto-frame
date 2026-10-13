@@ -50,12 +50,7 @@ class CropSuggestion {
 
 /// Live guidance for the viewfinder.
 class FramingGuidance {
-  const FramingGuidance({
-    required this.score,
-    required this.hints,
-    this.anchor,
-    this.target,
-  });
+  const FramingGuidance({required this.score, required this.hints, this.anchor, this.target});
 
   final double score;
   final List<String> hints;
@@ -94,9 +89,7 @@ class CompositionEngine {
     double horizonTiltDegrees = 0,
     List<AspectSpec> aspects = AspectSpec.all,
   }) {
-    final rotation = horizonTiltDegrees.abs() <= maxStraighten
-        ? -horizonTiltDegrees
-        : 0.0;
+    final rotation = horizonTiltDegrees.abs() <= maxStraighten ? -horizonTiltDegrees : 0.0;
     final rad = rotation * math.pi / 180;
     final cx = width / 2, cy = height / 2;
 
@@ -138,8 +131,7 @@ class CompositionEngine {
     double horizonTiltDegrees = 0,
   }) {
     final hints = <String>[];
-    if (horizonTiltDegrees.abs() > 1.5 &&
-        horizonTiltDegrees.abs() <= maxStraighten) {
+    if (horizonTiltDegrees.abs() > 1.5 && horizonTiltDegrees.abs() <= maxStraighten) {
       hints.add('Level the horizon');
     }
     if (subjects.isEmpty) {
@@ -178,13 +170,7 @@ class CompositionEngine {
 
   // ---------------------------------------------------------------------
 
-  _Eval? _bestForAspect(
-    double w,
-    double h,
-    List<Subject> subjects,
-    AspectSpec aspect,
-    double rad,
-  ) {
+  _Eval? _bestForAspect(double w, double h, List<Subject> subjects, AspectSpec aspect, double rad) {
     final ratio = aspect.ratio ?? w / h;
     double maxW, maxH;
     if (ratio > w / h) {
@@ -244,13 +230,7 @@ class CompositionEngine {
     return true;
   }
 
-  _Eval _evaluate(
-    Box crop,
-    List<Subject> subjects,
-    double imageW,
-    double imageH,
-    double scale,
-  ) {
+  _Eval _evaluate(Box crop, List<Subject> subjects, double imageW, double imageH, double scale) {
     final notes = <String>[];
     if (subjects.isEmpty) {
       // Nothing detected: prefer large, centred, levelled frames.
@@ -268,7 +248,8 @@ class CompositionEngine {
       if (frac < 0.01) {
         // Fully inside, but kissing the border creates tension.
         final m = 0.015 * math.max(crop.width, crop.height);
-        final touches = (s.box.left - crop.left < m) ||
+        final touches =
+            (s.box.left - crop.left < m) ||
             (crop.right - s.box.right < m) ||
             (s.box.top - crop.top < m) ||
             (crop.bottom - s.box.bottom < m);
@@ -340,14 +321,13 @@ class CompositionEngine {
     // 5. Subject scale relative to the frame.
     final cover = _coverage(subjects, crop);
     final ideal = hasFace ? 0.12 : 0.22;
-    final sizeScore = math.exp(
-      -math.pow(math.log((cover + 1e-4) / ideal), 2) / (2 * 0.9 * 0.9),
-    );
+    final sizeScore = math.exp(-math.pow(math.log((cover + 1e-4) / ideal), 2) / (2 * 0.9 * 0.9));
 
     // 6. Prefer keeping resolution.
     final resolution = math.sqrt(crop.area / (imageW * imageH));
 
-    final raw = 1.0 * placement +
+    final raw =
+        1.0 * placement +
         0.35 * lead +
         0.35 * headroom +
         0.5 * sizeScore +

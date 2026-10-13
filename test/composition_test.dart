@@ -74,11 +74,7 @@ void main() {
   });
 
   test('guidance tells you which way to pan', () {
-    final g = engine.guide(
-      width: w,
-      height: h,
-      subjects: [face(3600, 1500, 250, gaze: -0.9)],
-    );
+    final g = engine.guide(width: w, height: h, subjects: [face(3600, 1500, 250, gaze: -0.9)]);
     // Face hard right, looking left: target is the right third; need to pan
     // right so the subject moves left in frame.
     expect(g.hints, contains('Pan right'));

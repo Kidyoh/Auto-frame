@@ -93,7 +93,7 @@ void main() {
       const sim = ApertureSimulator(maxBlurFraction: 0.05);
 
       double bgDetail(RgbPlanes p) => stdDev(p.r, (i) {
-        final x = i % w, y = i ~/ w;
+        final x = i % w;
         return x < 30 || x > 130;
       });
       double subjectDiff(RgbPlanes p) {
@@ -106,13 +106,8 @@ void main() {
         return d / 100;
       }
 
-      RgbPlanes at(double f) => sim.render(
-        img,
-        mask: m.mask,
-        maskWidth: m.width,
-        maskHeight: m.height,
-        fNumber: f,
-      );
+      RgbPlanes at(double f) =>
+          sim.render(img, mask: m.mask, maskWidth: m.width, maskHeight: m.height, fNumber: f);
       final f14 = at(1.4), f4 = at(4), f16 = at(16);
 
       expect(bgDetail(f14), lessThan(bgDetail(f4)));
@@ -167,7 +162,11 @@ void main() {
     test('JSON round trip', () {
       final p = Presets.all['Moody']!
           .set(Adjust.exposure, 1.25)
-          .copyWith(lutName: 'Teal & Orange', lutIntensity: 0.6, crop: const Box(0.1, 0.1, 0.8, 0.8));
+          .copyWith(
+            lutName: 'Teal & Orange',
+            lutIntensity: 0.6,
+            crop: const Box(0.1, 0.1, 0.8, 0.8),
+          );
       final back = EditParams.fromJson(p.toJson());
       expect(back[Adjust.exposure], 1.25);
       expect(back.hslOf(HslBand.green).saturation, -40);

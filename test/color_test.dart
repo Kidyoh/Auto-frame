@@ -102,10 +102,7 @@ DOMAIN_MAX 1 1 1
     });
 
     test('rejects truncated files', () {
-      expect(
-        () => Lut3D.parseCube('LUT_3D_SIZE 2\n0 0 0\n'),
-        throwsFormatException,
-      );
+      expect(() => Lut3D.parseCube('LUT_3D_SIZE 2\n0 0 0\n'), throwsFormatException);
     });
 
     test('atlas layout matches shader addressing', () {

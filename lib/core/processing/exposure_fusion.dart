@@ -75,15 +75,17 @@ class ExposureFusion {
     for (var c = 0; c < 3; c++) {
       List<_Level>? blended;
       for (var k = 0; k < aligned.length; k++) {
-        final plane = switch (c) { 0 => aligned[k].r, 1 => aligned[k].g, _ => aligned[k].b };
+        final plane = switch (c) {
+          0 => aligned[k].r,
+          1 => aligned[k].g,
+          _ => aligned[k].b,
+        };
         final lap = _laplacianPyramid(plane, w, h, levels);
         final gw = weightPyramids[k];
-        if (blended == null) {
-          blended = [
-            for (var l = 0; l < levels; l++)
-              _Level(Float32List(lap[l].data.length), lap[l].w, lap[l].h),
-          ];
-        }
+        blended ??= [
+          for (var l = 0; l < levels; l++)
+            _Level(Float32List(lap[l].data.length), lap[l].w, lap[l].h),
+        ];
         for (var l = 0; l < levels; l++) {
           final dst = blended[l].data, ld = lap[l].data, wd = gw[l].data;
           for (var i = 0; i < dst.length; i++) {
@@ -92,7 +94,11 @@ class ExposureFusion {
         }
       }
       final collapsed = _collapse(blended!);
-      final target = switch (c) { 0 => out.r, 1 => out.g, _ => out.b };
+      final target = switch (c) {
+        0 => out.r,
+        1 => out.g,
+        _ => out.b,
+      };
       for (var i = 0; i < n; i++) {
         final v = collapsed[i];
         target[i] = v < 0 ? 0 : (v > 1 ? 1 : v);
@@ -237,12 +243,15 @@ class ExposureFusion {
         // Saturation: std-dev across channels.
         final r = f.r[i], g = f.g[i], b = f.b[i];
         final mu = (r + g + b) / 3;
-        final sat = math.sqrt(((r - mu) * (r - mu) + (g - mu) * (g - mu) + (b - mu) * (b - mu)) / 3);
+        final sat = math.sqrt(
+          ((r - mu) * (r - mu) + (g - mu) * (g - mu) + (b - mu) * (b - mu)) / 3,
+        );
         // Well-exposedness: closeness of each channel to mid-grey.
         final we = math.exp(
           -((r - 0.5) * (r - 0.5) + (g - 0.5) * (g - 0.5) + (b - 0.5) * (b - 0.5)) / twoSigma2,
         );
-        out[i] = math.pow(contrast + 1e-3, contrastWeight).toDouble() *
+        out[i] =
+            math.pow(contrast + 1e-3, contrastWeight).toDouble() *
                 math.pow(sat + 1e-3, saturationWeight).toDouble() *
                 math.pow(we, exposureWeight).toDouble() +
             1e-12;

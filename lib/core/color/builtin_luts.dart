@@ -26,8 +26,7 @@ class BuiltinLuts {
 
   static List<String> get names => _factories.keys.toList(growable: false);
 
-  static Lut3D byName(String name) =>
-      _cache.putIfAbsent(name, () => _factories[name]!());
+  static Lut3D byName(String name) => _cache.putIfAbsent(name, () => _factories[name]!());
 
   /// Technical transform: AF-Log back to a neutral display image.
   static Lut3D afLogToRec709() => Lut3D.generate(
@@ -37,18 +36,20 @@ class BuiltinLuts {
   );
 
   /// Log-input film look: filmic S-curve, warm highlights, cool shadows.
-  static Lut3D afCinematic() => Lut3D.generate(
-    title: 'AF Cinematic',
-    inputSpace: LutInputSpace.afLog,
-    (r, g, b) {
-      final lin = [AfLog.decode(r), AfLog.decode(g), AfLog.decode(b)];
-      final out = lin.map((v) => _filmic(v * 1.1)).toList();
-      final l = luma(out[0], out[1], out[2]);
-      return _splitTone(out, l, shadowHue: 195, shadowAmt: 0.06, highHue: 35, highAmt: 0.07)
-          .map(clamp01)
-          .toList();
-    },
-  );
+  static Lut3D afCinematic() =>
+      Lut3D.generate(title: 'AF Cinematic', inputSpace: LutInputSpace.afLog, (r, g, b) {
+        final lin = [AfLog.decode(r), AfLog.decode(g), AfLog.decode(b)];
+        final out = lin.map((v) => _filmic(v * 1.1)).toList();
+        final l = luma(out[0], out[1], out[2]);
+        return _splitTone(
+          out,
+          l,
+          shadowHue: 195,
+          shadowAmt: 0.06,
+          highHue: 35,
+          highAmt: 0.07,
+        ).map(clamp01).toList();
+      });
 
   static Lut3D tealOrange() => Lut3D.generate(title: 'Teal & Orange', (r, g, b) {
     var c = [r, g, b];
@@ -62,11 +63,7 @@ class BuiltinLuts {
     var c = [r * 1.06, g * 1.0, b * 0.86];
     c = c.map((v) => _sCurve(clamp01(v), 0.12)).toList();
     // Lifted, warm blacks and soft highlight roll-off like negative film.
-    c = [
-      0.04 + c[0] * 0.95,
-      0.03 + c[1] * 0.94,
-      0.02 + c[2] * 0.90,
-    ];
+    c = [0.04 + c[0] * 0.95, 0.03 + c[1] * 0.94, 0.02 + c[2] * 0.90];
     return _saturate(c, 1.05).map(clamp01).toList();
   });
 
@@ -84,9 +81,8 @@ class BuiltinLuts {
   static Lut3D bleachBypass() => Lut3D.generate(title: 'Bleach Bypass', (r, g, b) {
     final l = luma(r, g, b);
     // Overlay-blend the luma layer back onto the colour, then desaturate.
-    double overlay(double base, double blend) => base < 0.5
-        ? 2 * base * blend
-        : 1 - 2 * (1 - base) * (1 - blend);
+    double overlay(double base, double blend) =>
+        base < 0.5 ? 2 * base * blend : 1 - 2 * (1 - base) * (1 - blend);
     var c = [overlay(r, l), overlay(g, l), overlay(b, l)];
     c = _saturate(c, 0.55);
     return c.map((v) => clamp01(_sCurve(v, 0.15))).toList();

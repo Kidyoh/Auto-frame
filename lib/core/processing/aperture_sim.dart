@@ -91,9 +91,7 @@ class ApertureSimulator {
       bgWeight[i] = 1 - m[i] * 0.98;
     }
 
-    final layerRadii = [
-      for (var l = 1; l <= levels; l++) maxRadius / ds * l / levels,
-    ];
+    final layerRadii = [for (var l = 1; l <= levels; l++) maxRadius / ds * l / levels];
     final layers = <List<Float32List>>[];
     for (final r in layerRadii) {
       final wgt = Float32List.fromList(bgWeight);

@@ -99,12 +99,7 @@ class SaliencyDetector {
     final x0 = pct(xs, 0.08), x1 = pct(xs, 0.92);
     final y0 = pct(ys, 0.08), y1 = pct(ys, 0.92);
     final sx = image.width / width, sy = image.height / height;
-    final box = Box.fromLTRB(
-      (x0 - 0.5) * sx,
-      (y0 - 0.5) * sy,
-      (x1 + 0.5) * sx,
-      (y1 + 0.5) * sy,
-    );
+    final box = Box.fromLTRB((x0 - 0.5) * sx, (y0 - 0.5) * sy, (x1 + 0.5) * sx, (y1 + 0.5) * sy);
     return Subject(box: box, kind: SubjectKind.salient, weight: 0.8, label: 'Salient');
   }
 
@@ -114,8 +109,7 @@ class SaliencyDetector {
     final x = (0.4124 * lr + 0.3576 * lg + 0.1805 * lb) / 0.95047;
     final y = 0.2126 * lr + 0.7152 * lg + 0.0722 * lb;
     final z = (0.0193 * lr + 0.1192 * lg + 0.9505 * lb) / 1.08883;
-    double f(double t) =>
-        t > 0.008856 ? math.pow(t, 1 / 3).toDouble() : 7.787 * t + 16 / 116;
+    double f(double t) => t > 0.008856 ? math.pow(t, 1 / 3).toDouble() : 7.787 * t + 16 / 116;
     final fx = f(x), fy = f(y), fz = f(z);
     return (116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz));
   }

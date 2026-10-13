@@ -81,14 +81,7 @@ class RgbPlanes {
 
 /// Resample a single plane. Downscaling averages the covered source area;
 /// upscaling uses bilinear interpolation.
-void resizePlane(
-  Float32List src,
-  int sw,
-  int sh,
-  Float32List dst,
-  int dw,
-  int dh,
-) {
+void resizePlane(Float32List src, int sw, int sh, Float32List dst, int dw, int dh) {
   if (dw <= sw && dh <= sh) {
     final fx = sw / dw, fy = sh / dh;
     for (var y = 0; y < dh; y++) {
@@ -143,8 +136,7 @@ void boxBlur(Float32List p, int w, int h, int radius) {
     }
     for (var x = 0; x < w; x++) {
       tmp[x] = acc / win;
-      acc += p[row + (x + radius + 1).clamp(0, w - 1)] -
-          p[row + (x - radius).clamp(0, w - 1)];
+      acc += p[row + (x + radius + 1).clamp(0, w - 1)] - p[row + (x - radius).clamp(0, w - 1)];
     }
     for (var x = 0; x < w; x++) {
       p[row + x] = tmp[x];
@@ -158,8 +150,7 @@ void boxBlur(Float32List p, int w, int h, int radius) {
     }
     for (var y = 0; y < h; y++) {
       tmp[y] = acc / win;
-      acc += p[(y + radius + 1).clamp(0, h - 1) * w + x] -
-          p[(y - radius).clamp(0, h - 1) * w + x];
+      acc += p[(y + radius + 1).clamp(0, h - 1) * w + x] - p[(y - radius).clamp(0, h - 1) * w + x];
     }
     for (var y = 0; y < h; y++) {
       p[y * w + x] = tmp[y];

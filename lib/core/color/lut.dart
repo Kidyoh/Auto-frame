@@ -107,13 +107,7 @@ class Lut3D {
 
   /// Apply the LUT to a display-sRGB colour, honouring [inputSpace] and
   /// blending with the original by [intensity].
-  void applyToSrgb(
-    double r,
-    double g,
-    double b,
-    List<double> out, {
-    double intensity = 1,
-  }) {
+  void applyToSrgb(double r, double g, double b, List<double> out, {double intensity = 1}) {
     var ir = r, ig = g, ib = b;
     if (inputSpace == LutInputSpace.afLog) {
       ir = AfLog.fromSrgb(r);
@@ -132,11 +126,7 @@ class Lut3D {
   /// sRGB -> (AF-Log if [logEncode]) -> this LUT (at [intensity]).
   ///
   /// Used for video, where the native encoder applies one LUT per frame.
-  Lut3D bakeForSrgbInput({
-    int outSize = 33,
-    double intensity = 1,
-    bool logEncode = false,
-  }) {
+  Lut3D bakeForSrgbInput({int outSize = 33, double intensity = 1, bool logEncode = false}) {
     final tmp = List<double>.filled(3, 0);
     return Lut3D.generate(size: outSize, title: '$title (baked)', (r, g, b) {
       double ir = r, ig = g, ib = b;
@@ -182,9 +172,7 @@ class Lut3D {
     final sb = StringBuffer()
       ..writeln('TITLE "$title"')
       ..writeln('# Created with Auto Frame')
-      ..writeln(
-        '# AF_INPUT_SPACE ${inputSpace == LutInputSpace.afLog ? 'AF-LOG' : 'REC709'}',
-      )
+      ..writeln('# AF_INPUT_SPACE ${inputSpace == LutInputSpace.afLog ? 'AF-LOG' : 'REC709'}')
       ..writeln('LUT_3D_SIZE $size')
       ..writeln('DOMAIN_MIN ${domainMin.join(' ')}')
       ..writeln('DOMAIN_MAX ${domainMax.join(' ')}');
@@ -227,8 +215,7 @@ class Lut3D {
         dMin = _triple(line);
       } else if (upper.startsWith('DOMAIN_MAX')) {
         dMax = _triple(line);
-      } else if (upper.startsWith('LUT_3D_INPUT_RANGE') ||
-          upper.startsWith('LUT_1D_INPUT_RANGE')) {
+      } else if (upper.startsWith('LUT_3D_INPUT_RANGE') || upper.startsWith('LUT_1D_INPUT_RANGE')) {
         final parts = line.split(RegExp(r'\s+'));
         final lo = double.parse(parts[1]), hi = double.parse(parts[2]);
         dMin = [lo, lo, lo];

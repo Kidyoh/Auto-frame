@@ -41,11 +41,6 @@ class Subject {
     SubjectKind.salient => 1.0,
   };
 
-  Subject copyWith({Box? box}) => Subject(
-    box: box ?? this.box,
-    kind: kind,
-    weight: weight,
-    gazeX: gazeX,
-    label: label,
-  );
+  Subject copyWith({Box? box}) =>
+      Subject(box: box ?? this.box, kind: kind, weight: weight, gazeX: gazeX, label: label);
 }
